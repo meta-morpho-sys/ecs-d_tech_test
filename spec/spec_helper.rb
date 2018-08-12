@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rspec'
+require 'rspec_sequel_matchers'
 require 'simplecov'
 require 'simplecov-console'
 
@@ -18,6 +19,17 @@ RSpec.configure do |rspec|
     # binding.pry
   end
 end
+
+RSpec.configure do |config|
+  config.profile_examples = 5
+  config.order = :random
+  config.include RspecSequel::Matchers
+  # Global require of 'support/db' when tests touch our DB.
+  config.when_first_matching_example_defined(:db) do
+    require_relative 'support/db'
+  end
+end
+
 
 SCF = SimpleCov::Formatter
 formatters = [SCF::Console, SCF::HTMLFormatter]
