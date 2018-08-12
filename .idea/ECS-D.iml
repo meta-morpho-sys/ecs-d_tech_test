@@ -28,6 +28,7 @@
     <orderEntry type="library" scope="PROVIDED" name="rspec-expectations (v3.7.0, ruby-2.4.1-p111) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-mocks (v3.7.0, ruby-2.4.1-p111) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rspec-support (v3.7.1, ruby-2.4.1-p111) [gem]" level="application" />
+    <orderEntry type="library" scope="PROVIDED" name="rspec_sequel_matchers (v0.5.0, ruby-2.4.1-p111) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="rubocop (v0.57.2, ruby-2.4.1-p111) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="ruby-progressbar (v1.9.0, ruby-2.4.1-p111) [gem]" level="application" />
     <orderEntry type="library" scope="PROVIDED" name="sequel (v5.9.0, ruby-2.4.1-p111) [gem]" level="application" />
