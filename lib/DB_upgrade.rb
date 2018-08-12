@@ -2,7 +2,6 @@
 
 require_relative '../db/sequel_setup'
 
-def lookup_db_version
-  print 'hello'
+def lookup_current_db_version
   DB[:versionTable].map(:version).first
 end
