@@ -10,3 +10,4 @@
 
 #### Next steps:
 1. Provide for an automatic access to the directory that will be passed as a parameter from outside.
+

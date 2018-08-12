@@ -18,15 +18,18 @@ describe 'DB upgrade' do
     end
   end
 
-  describe '#find_highest_script_number' do
-    it 'finds the highest script number among the sql scripts' do
-      script_name = %w[045.createtable.sql 049.createtable.sql 011createtable.sql]
-      expect(find_highest_script_number(script_name))
-        .to eq '049.createtable.sql'
-    end
-  end
 
-  describe '#compare_version_nums' do
-    pending 'Compares the current version against the scripts numbers'
+  describe '#db_status' do
+    it 'the current version is equal to the highest of the scripts numbers' do
+      allow(Dir).to receive(:entries)
+                      .and_return(%w[045.createtable.sql 011createtable.sql])
+      dir_name = 'db/upgrade_scripts'
+      expect(db_status(dir_name)).to eq 'DB up to date!'
+    end
+
+    it 'and the current version is lower than the highest of the scripts numbers' do
+      dir_name = 'db/upgrade_scripts'
+      expect(db_status(dir_name)).to eq 'Upgrade your DB!'
+    end
   end
 end
