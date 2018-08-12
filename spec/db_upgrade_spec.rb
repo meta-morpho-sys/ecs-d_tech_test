@@ -13,12 +13,17 @@ describe 'DB upgrade' do
   describe '#scan_scripts_names' do
     it '# scans the scripts folder and returns a collection of script names' do
       dir_name = 'db/upgrade_scripts'
-      expect(scan_scripts_names(dir_name)).to include('045.createtable.sql', '049.createtable.sql','011createtable.sql')
+      expect(scan_scripts_names(dir_name))
+        .to include('045.createtable.sql', '049.createtable.sql', '011createtable.sql')
     end
   end
 
-  describe '#find_highest_scirpt_number' do
-    pending 'finds the highest script number among the sql scripts'
+  describe '#find_highest_script_number' do
+    it 'finds the highest script number among the sql scripts' do
+      script_name = %w[045.createtable.sql 049.createtable.sql 011createtable.sql]
+      expect(find_highest_script_number(script_name))
+        .to eq '049.createtable.sql'
+    end
   end
 
   describe '#compare_version_nums' do

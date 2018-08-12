@@ -9,3 +9,7 @@ end
 def scan_scripts_names(path)
   Dir.entries(path).select { |f| File.file?(File.join(path, f)) }
 end
+
+def find_highest_script_number(script_names)
+  script_names.max
+end
