@@ -18,6 +18,13 @@ describe DBUpgrade, :db do
     end
   end
 
+  describe '#script_numbers' do
+    it 'extracts the script numbers from the file names' do
+      file_names = %w[045.createtable.sql 011createtable.sql 049.createtable.sql]
+      expect(upgrader.script_numbers(file_names)).to include(45, 11, 49)
+    end
+  end
+
   describe '#upgrade_db' do
     it 'the current version is equal to the highest of the scripts numbers' do
       allow(Dir)

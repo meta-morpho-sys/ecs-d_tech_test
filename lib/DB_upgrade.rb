@@ -18,7 +18,7 @@ class DBUpgrade
   end
 
   def upgrade_db
-    highest_script_v = scan_scripts_names.max.scan(/\d+/).first.to_i
+    highest_script_v = script_numbers(scan_scripts_names).max
     if highest_script_v > lookup_current_db_version
       DB.run File.read('/Users/astarte/TechTests/ECS-D/db/upgrade_scripts/049.createtable.sql')
       VERSION_TABLE.update(version: highest_script_v)
@@ -27,6 +27,14 @@ class DBUpgrade
     end
   end
 
+  # Extracts numbers from the script names
+  def script_numbers(strings)
+    strings.map do |s|
+      s.scan(/\d+/).first.to_i
+    end
+  end
+
+  # Returns a collection of filenames as strings
   def scan_scripts_names
     Dir.entries(@sql_scripts_dir)
       .select { |f| File.file?(File.join(@sql_scripts_dir, f)) }
