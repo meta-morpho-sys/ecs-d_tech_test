@@ -7,7 +7,8 @@ describe DBUpgrade, :db do
 
   describe '#lookup_current_db_version' do
     it 'Looks up the current version number' do
-      expect(upgrader.lookup_current_db_version).to eq 49
+      allow(upgrader).to receive(:current_db_version).and_return(11)
+      expect(upgrader.current_db_version).to eq 11
     end
   end
 
@@ -21,7 +22,15 @@ describe DBUpgrade, :db do
   describe '#script_numbers' do
     it 'extracts the script numbers from the file names' do
       file_names = %w[045.createtable.sql 011createtable.sql 049.createtable.sql]
-      expect(upgrader.script_numbers(file_names)).to include(45, 11, 49)
+      expect(upgrader.get_numbers(file_names)).to include(45, 11, 49)
+    end
+  end
+
+  describe '#select_higher_versions' do
+    it 'picks files that have version number greater than the current db version' do
+      allow(upgrader).to receive(:current_db_version).and_return(11)
+      expect(upgrader.select_higher_versions)
+        .to include('045.createtable.sql', '049.createtable.sql')
     end
   end
 
@@ -33,12 +42,12 @@ describe DBUpgrade, :db do
       expect(upgrader.upgrade_db).to eq 'DB up to date!'
     end
 
-    it 'and the current version is lower than the highest of the scripts numbers' do
+    it 'the current version is lower than the highest of the scripts numbers' do
       allow(Dir)
         .to receive(:entries)
-              .and_return(%w[045.createtable.sql 011createtable.sql 049.createtable.sql])
+        .and_return(%w[045.createtable.sql 011createtable.sql 049.createtable.sql])
       upgrader.upgrade_db
-      expect(upgrader.lookup_current_db_version).to eq 49
+      expect(upgrader.current_db_version).to eq 49
     end
   end
 end

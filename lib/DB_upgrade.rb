@@ -13,25 +13,30 @@ class DBUpgrade
     @db_password = db_password
   end
 
-  def lookup_current_db_version
+  def current_db_version
     VERSION_TABLE.map(:version).first
   end
 
   def upgrade_db
-    highest_script_v = script_numbers(scan_scripts_names).max
-    if highest_script_v > lookup_current_db_version
-      DB.run File.read('/Users/astarte/TechTests/ECS-D/db/upgrade_scripts/049.createtable.sql')
-      VERSION_TABLE.update(version: highest_script_v)
+    if get_highest_script_num > current_db_version
+      # Updates DB
+      # Run those files that are higher version than Current DB version
+      files_to_run = select_higher_versions
+      files_to_run.each { |file| DB.run File.read @sql_scripts_dir + '/' + file }
+      VERSION_TABLE.update(version: get_highest_script_num)
     else
       'DB up to date!'
     end
   end
 
-  # Extracts numbers from the script names
-  def script_numbers(strings)
-    strings.map do |s|
-      s.scan(/\d+/).first.to_i
+  def select_higher_versions
+    scan_scripts_names.select do |name|
+      get_num(name) > current_db_version
     end
+  end
+
+  def get_highest_script_num
+    get_numbers(scan_scripts_names).max
   end
 
   # Returns a collection of filenames as strings
@@ -39,4 +44,20 @@ class DBUpgrade
     Dir.entries(@sql_scripts_dir)
       .select { |f| File.file?(File.join(@sql_scripts_dir, f)) }
   end
+
+  # Extracts numbers from the script names
+  def get_numbers(strings)
+    strings.map do |s|
+      s.scan(/\d+/).first.to_i
+    end
+  end
+
+  private
+
+  def get_num(string)
+     string.scan(/\d+/).first.to_i
+  end
 end
+
+db = DBUpgrade.new('db/upgrade_scripts', 'root', 'localhost', 'test', 'yuliya')
+p db.upgrade_db
