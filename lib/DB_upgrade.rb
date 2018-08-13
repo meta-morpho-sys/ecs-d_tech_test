@@ -1,8 +1,10 @@
+#!/usr/bin/env ruby
 # frozen_string_literal: true
 
 require_relative '../db/sequel_setup'
 
 class DBUpgrade
+
   VERSION_TABLE = DB[:versionTable]
 
   def initialize(sql_scripts_dir, db_username, db_host, db_name, db_password)
@@ -55,9 +57,20 @@ class DBUpgrade
   private
 
   def get_num(string)
-     string.scan(/\d+/).first.to_i
+    string.scan(/\d+/).first.to_i
   end
 end
 
-db = DBUpgrade.new('db/upgrade_scripts', 'root', 'localhost', 'test', 'yuliya')
-p db.upgrade_db
+if ARGV.length != 5
+  puts 'Usage: ./DB_upgrade dir user host db_name db_password'
+  exit(1)
+end
+
+dir = ARGV[0]
+db_username = ARGV[1]
+db_host = ARGV[2]
+db_name = ARGV[3]
+db_password = ARGV[4]
+
+upgrader = DBUpgrade.new(dir, db_username, db_host, db_name, db_password)
+upgrader.upgrade_db
