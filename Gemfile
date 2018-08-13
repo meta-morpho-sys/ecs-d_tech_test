@@ -12,6 +12,6 @@ group :test do
 end
 
 gem 'mysql2'
-gem 'pry'
+gem 'rake'
 gem 'rubocop'
 gem 'sequel'
