@@ -60,6 +60,7 @@ For the script:
 
 
 #### Next steps:
-1. Wiring the Sequel connection with the DGUpgrade instance variables
-2. Refactoring and better naming.
+1. Refactoring and better naming.
+2. Error handling
+3. Progress messages
 
