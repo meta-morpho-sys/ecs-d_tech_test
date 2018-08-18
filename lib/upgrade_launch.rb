@@ -5,7 +5,6 @@ require 'optparse'
 require 'ostruct'
 require 'io/console'
 
-require_relative './DB_upgrade2'
 
 do_cool_thing = false
 saturn = false
@@ -94,5 +93,12 @@ if ARGV.length != 9 && !ARGV.include?('-c') && !ARGV.include?('-s')
   exit(1)
 end
 
-dir, user, host, database, pswd = options.values
-upgrade_db(dir, user, host, database, pswd)
+dir, user, host, database, pwd = options.values
+ENV['user'] = user
+ENV['host'] = host
+ENV['db'] = database
+ENV['pwd'] = pwd
+
+
+require_relative '../app'
+DatabaseYuliya.new(dir)
