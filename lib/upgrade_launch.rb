@@ -20,7 +20,6 @@ opt_parser = OptionParser.new do |opts|
   opts.separator 'Options:'
 
   opts.on('-d', '--dir DIR', 'Scripts directory') do |dir|
-    # options.dir = dir
     options[dir] = dir
   end
 
@@ -37,7 +36,7 @@ opt_parser = OptionParser.new do |opts|
   end
 
   opts.on('-p', '--db_psw', 'Database password') do
-    print 'Password: '
+    puts 'Password: '
     options.merge!(db_psw: STDIN.noecho(&:gets).chomp)
   end
 
@@ -94,11 +93,7 @@ if ARGV.length != 9 && !ARGV.include?('-c') && !ARGV.include?('-s')
 end
 
 dir, user, host, database, pwd = options.values
-ENV['user'] = user
-ENV['host'] = host
-ENV['db'] = database
-ENV['pwd'] = pwd
-
 
 require_relative '../app'
-DatabaseYuliya.new(dir)
+DatabaseYuliya.new(dir, user, host, database, pwd)
+
