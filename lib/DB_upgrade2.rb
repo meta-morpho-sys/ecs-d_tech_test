@@ -2,60 +2,59 @@
 # frozen_string_literal: true
 
 require 'sequel'
+require 'logger'
+require_relative 'script'
 
-class DatabaseYuliya
+
+class DatabaseMigrations
+  LOGGER = Logger.new(STDOUT)
+
   def initialize(dir, user, host, database, pwd)
     @dir = dir
     @db = Sequel.mysql2(host: host, database: database, user: user, password: pwd)
     unless @db.table_exists? 'versionTable'
       @db.create_table :versionTable do
         Integer :version
-        puts 'Table created'
+        LOGGER.info 'Version table created'
       end
     end
-    @version_table = @db[:versionTable]
+    @versions = @db[:versionTable]
+    @versions.insert(version: 0)
   end
 
-  def get_db_version
-    @version_table.map(:version).first
+  def db_version
+    @versions.map(:version).first
   end
 
-  def set_db_version=(version)
-    if db_version.nil?
-      @version_table.insert(version: version)
-    else
-      @version_table.update(version: version)
-    end
+  def db_version=(version)
+    @versions.update(version: version)
   end
 
+  def run(script)
+    sql = script.read
+    @db.run sql
+  end
 
   def upgrade_db
-    current_db_version = get_db_version
+    current_db_version = db_version
+    LOGGER.info("Current DB version is #{current_db_version}")
 
-    p scripts = Scrypts.look_up(@dir)
+    # Get highest script version
+    scripts = Scrypts.look_up(@dir).sort_by(&:version)
+    max_version = scripts.last.version
+    LOGGER.info("Max script version is #{max_version}")
 
-    # if get_highest_script(@dir) > db_version
-    #   files_to_run = select_higher_versions(@dir)
-    #   files_to_run.each { |file| db.run File.read @dir + '/' + file }
-    # TODO: When updating the db version check for nil. In nil? then INSERT if not, then UPDATE
-    # else
-    #   puts 'DB up to date!'
-    # end
+    # Run only scripts with version higher than the DB version.
+    if max_version > current_db_version
+      LOGGER.info 'updating...'
+      scripts_to_run = scripts.select { |s| s.version > current_db_version }
+      scripts_to_run.each do |s|
+        run(s)
+        LOGGER.info"Running script #{s.file_path}"
+      end
+      self.db_version = max_version
+    else
+      LOGGER.warn 'DB up to date'
+    end
   end
-
-#   def select_higher_versions(dir)
-#     scan_scripts_names(dir).select do |name|
-#       version(name) > db_version
-#     end
-#   end
-#
-#   def get_highest_script(dir)
-#     get_versions(Scrypts.look_up(dir)).max
-#   end
-#
-#
-# # Returns a collection of script versions
-#   def get_versions(strings)
-#     strings.map { |s| version(s) }
-#   end
 end
