@@ -10,7 +10,8 @@ describe Scrypts do
 end
 
 describe Scrypt do
-  let(:scrypt) { Scrypt.new('db/upgrade_scripts', '049.createtable.sql')}
+  let(:scrypt) { Scrypt.new('db/upgrade_scripts', '049.createtable.sql') }
+
   it 'finds the file path' do
     expect(scrypt.file_path). to eq 'db/upgrade_scripts/049.createtable.sql'
   end
@@ -23,5 +24,11 @@ describe Scrypt do
         scripting_language VARCHAR(20)
       );
     EOF
+  end
+
+  describe '#version' do
+    it 'extracts the script numbers from the file names' do
+      expect(scrypt.version).to eq 49
+    end
   end
 end
