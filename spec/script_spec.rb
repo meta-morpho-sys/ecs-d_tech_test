@@ -9,6 +9,12 @@ describe Scrypts do
       .and_return(%w[045.createtable.sql 011createtable.sql 049.createtable.sql])
     Scrypts.look_up('db/upgrade_scripts')
   end
+
+  it 'returns a list of scripts for directory' do
+    scripts = Scrypts.look_up('db/upgrade_scripts')
+    file_names = scripts.map(&:file_name)
+    expect(file_names).to eq(%w[045.createtable.sql 011createtable.sql 049.createtable.sql])
+  end
 end
 
 describe Scrypt do
