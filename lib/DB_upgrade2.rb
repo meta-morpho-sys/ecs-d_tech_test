@@ -2,12 +2,20 @@
 # frozen_string_literal: true
 
 require 'sequel'
-require 'logger'
+require_relative 'logging'
 require_relative 'script'
 
-
+# --------------------------------------------------------------------------
+# Connects to MySQL database and carries out changes on the database schema.
+# It takes five parameters during its initialisation
+#   -dir --> a rel. or abs path to a directory with numbered SQL scripts,
+#   -user --> database username
+#   -host --> host
+#   -database --> database name
+#   -pwd --> your password for the database
+# --------------------------------------------------------------------------
 class DatabaseMigrations
-  LOGGER = Logger.new(STDOUT)
+  LOGGER = my_logger
 
   def initialize(dir, user, host, database, pwd)
     @dir = dir
@@ -50,9 +58,11 @@ class DatabaseMigrations
       scripts_to_run = scripts.select { |s| s.version > current_db_version }
       scripts_to_run.each do |s|
         run(s)
-        LOGGER.info"Running script #{s.file_path}"
+        LOGGER.info"Running script #{s.file_path}..."
+        LOGGER.info '...done ;-)'
       end
       self.db_version = max_version
+      LOGGER.info "New DB version: #{db_version}"
     else
       LOGGER.warn 'DB up to date'
     end
