@@ -54,17 +54,23 @@ class DatabaseMigrations
 
     # Run only scripts with version higher than the DB version.
     if max_version > current_db_version
+
       LOGGER.info 'updating...'
-      scripts_to_run = scripts.select { |s| s.version > current_db_version }
-      scripts_to_run.each do |s|
-        run(s)
-        LOGGER.info"Running script #{s.file_path}..."
-        LOGGER.info '...done ;-)'
-      end
+      run_scripts(current_db_version, scripts)
+
       self.db_version = max_version
       LOGGER.info "New DB version: #{db_version}"
     else
       LOGGER.warn 'DB up to date'
+    end
+  end
+
+  def run_scripts(current_db_version, scripts)
+    scripts_to_run = scripts.select { |s| s.version > current_db_version }
+    scripts_to_run.each do |s|
+      run(s)
+      LOGGER.info "Running script #{s.file_path}..."
+      LOGGER.info '...done ;-)'
     end
   end
 end
