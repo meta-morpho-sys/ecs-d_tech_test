@@ -4,8 +4,10 @@ require_relative '../lib/script'
 
 describe Scrypts do
   it 'finds scripts in given directory' do
-    expect(Scrypts.look_up('db/upgrade_scripts'))
-      .to include('045.createtable.sql', '011createtable.sql', '049.createtable.sql')
+    expect(Dir).to receive(:entries)
+      .with('db/upgrade_scripts')
+      .and_return(%w[045.createtable.sql 011createtable.sql 049.createtable.sql])
+    Scrypts.look_up('db/upgrade_scripts')
   end
 end
 
