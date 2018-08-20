@@ -16,11 +16,12 @@ describe Scrypt do
   end
 
   it 'reads the file contents' do
-    expect(scrypt.read). to eq 'CREATE TABLE test (
-  participant VARCHAR(20),
-  age INTEGER(2),
-  scripting_language VARCHAR(20)
-);
-'
+    expect(scrypt.read). to eq <<~EOF
+      CREATE TABLE test (
+        participant VARCHAR(20),
+        age INTEGER(2),
+        scripting_language VARCHAR(20)
+      );
+    EOF
   end
 end
