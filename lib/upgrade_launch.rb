@@ -16,7 +16,7 @@ opt_parser = OptionParser.new do |opts|
   opts.define_head 'Usage: ./upgrade_launch -d -u -h -n -p'
   opts.separator ''
   opts.separator 'Example:'
-  opts.separator './upgrade_launch.rb -d ../db/upgrade_scripts -u root -h localhost -n tech_test -p'
+  opts.separator './upgrade_launch.rb -d ../db/upgrade_scripts -u root -h localhost -n ecs_d -p'
   opts.separator 'Password prompt:'
   opts.separator ''
   opts.separator 'Options:'
@@ -95,7 +95,7 @@ if ARGV.length != 9 # && !ARGV.include?('-c') && !ARGV.include?('-s')
 else
   dir, user, host, database, pwd = options.values
 
-  db = DatabaseMigrations.new(dir, user, host, database, pwd)
-  db.upgrade_db
+  db = Database.new(dir, user, host, database, pwd)
+  db.upgrade
 end
 

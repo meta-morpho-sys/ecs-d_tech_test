@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../lib/DB_upgrade.rb'
+require_relative '../lib/oc/scratch/DB_upgrade.rb'
 
 describe DBUpgrade, :db do
   let(:upgrader) { DBUpgrade.new('db/upgrade_scripts', 'root', 'localhost', 'test', 'yuliya') }
