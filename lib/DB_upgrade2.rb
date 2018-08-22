@@ -14,7 +14,9 @@ require_relative 'script'
 #   -database --> database name
 #   -pwd --> your password for the database
 # --------------------------------------------------------------------------
-class DatabaseMigrations
+class Database
+  attr_reader :db
+
   LOGGER = my_logger
 
   def initialize(dir, user, host, database, pwd)
@@ -30,11 +32,11 @@ class DatabaseMigrations
     @versions.insert(version: 0)
   end
 
-  def db_version
+  def version
     @versions.map(:version).first
   end
 
-  def db_version=(version)
+  def version=(version)
     @versions.update(version: version)
   end
 
@@ -43,23 +45,22 @@ class DatabaseMigrations
     @db.run sql
   end
 
-  def upgrade_db
-    current_db_version = db_version
+  def upgrade
+    current_db_version = version
     LOGGER.info("Current DB version is #{current_db_version}")
 
     # Get highest script version
-    scripts = Scrypts.look_up(@dir).sort_by(&:version)
+    scripts = Scripts.look_up(@dir).sort_by(&:version)
     max_version = scripts.last.version
     LOGGER.info("Max script version is #{max_version}")
 
     # Run only scripts with version higher than the DB version.
     if max_version > current_db_version
-
       LOGGER.info 'updating...'
       run_scripts(current_db_version, scripts)
 
-      self.db_version = max_version
-      LOGGER.info "New DB version: #{db_version}"
+      self.version = max_version
+      LOGGER.info "New DB version: #{version}"
     else
       LOGGER.warn 'DB up to date'
     end
