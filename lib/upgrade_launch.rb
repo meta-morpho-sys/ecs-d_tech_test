@@ -22,24 +22,24 @@ opt_parser = OptionParser.new do |opts|
   opts.separator 'Options:'
 
   opts.on('-d', '--dir DIR', 'Scripts directory') do |dir|
-    options[dir] = dir
+    options[:dir] = dir
   end
 
   opts.on('-u', '--user USER', 'User name') do |user|
-    options[user] = user
+    options[:user] = user
   end
 
   opts.on('-h', '--host HOST', 'Database hosts') do |host|
-    options[host] = host
+    options[:host] = host
   end
 
   opts.on('-n', '--db_name DB_NAME', 'Database name') do |name|
-    options[name] = name
+    options[:db_name] = name
   end
 
-  opts.on('-p', '--db_psw', 'Database password') do
+  opts.on('-p', '--db_pwd', 'Database password') do
     puts 'Password: '
-    options.merge!(db_psw: STDIN.noecho(&:gets).chomp)
+    options.merge!(pwd: STDIN.noecho(&:gets).chomp)
   end
 
   opts.on_tail('-?', '--help', 'Show this message') do
@@ -59,43 +59,12 @@ end
 
 opt_parser.parse(ARGV)
 
-
-if do_cool_thing
-  puts "
-  ~ ~ ~ ~~~ ~ ~ ~~~~ ~ ~ ~
-~~   ~ ~  ~~~   ~  ~~~ ~ ~  ~~~
-
-                O  o
-          _\\_   o
->('>   \\/  o\\ .
-      //\\___=
-    '''
-    "
-end
-
-
-if saturn
-  puts "
-        ,MMM8&&&.
-    _...MMMMM88&&&&..._
- .::'''MMMMM88&&&&&&'''::.
-::     MMMMM88&&&&&&     ::
-'::....MMMMM88&&&&&&....::'
-   `''''MMMMM88&&&&''''`
-         'MMM8&&&'
-"
-  puts
-end
-
-
-if ARGV.length != 9 # && !ARGV.include?('-c') && !ARGV.include?('-s')
+if ARGV.length != 9
   puts ARGV.length
   puts opt_parser.help
   exit(1)
 else
-  dir, user, host, database, pwd = options.values
-
-  db = Database.new(dir, user, host, database, pwd)
+  db = Database.new(options)
   db.upgrade
 end
 
