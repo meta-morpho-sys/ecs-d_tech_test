@@ -10,9 +10,7 @@ describe Database, :db do
 
   describe 'initialize' do
     it 'Database class can be initialized with keyword args' do
-      dtb.version = 22
       expect(dtb.db.test_connection).to eq true
-      expect(dtb.version).to eq 22
     end
 
     it 'Database class can be initialized with existing db connection' do
@@ -25,6 +23,13 @@ describe Database, :db do
   describe '#version' do
     it 'Looks up the current version number' do
       expect(dtb.version).not_to eq nil
+    end
+  end
+
+  describe '#version=' do
+    it 'sets the versionTable to a new value' do
+      dtb.version = 22
+      expect(dtb.version).to eq 22
     end
   end
 
