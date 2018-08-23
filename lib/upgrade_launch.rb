@@ -7,8 +7,6 @@ require 'io/console'
 require_relative '../app'
 
 
-do_cool_thing = false
-saturn = false
 options = {}
 
 opt_parser = OptionParser.new do |opts|
@@ -34,7 +32,7 @@ opt_parser = OptionParser.new do |opts|
   end
 
   opts.on('-n', '--db_name DB_NAME', 'Database name') do |name|
-    options[:db_name] = name
+    options[:database] = name
   end
 
   opts.on('-p', '--db_pwd', 'Database password') do
@@ -55,7 +53,6 @@ if ARGV.length != 9
   puts opt_parser.help
   exit(1)
 else
-  db = Database.new(options)
+  db = Database.new(**options)
   db.upgrade
 end
-

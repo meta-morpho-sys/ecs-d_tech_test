@@ -19,9 +19,9 @@ class Database
 
   LOGGER = my_logger
 
-  def initialize(ext_db_conn = nil, dir: nil, user: nil, host: nil, db_name: nil, pwd: nil)
+  def initialize(db = nil, **db_conn_info)
     @dir = dir
-    @db = ext_db_conn || Sequel.mysql2(host: host, database: db_name, user: user, password: pwd)
+    @db = db || get_db(db_conn_info)
     unless @db.table_exists? 'versionTable'
       @db.create_table :versionTable do
         Integer :version
