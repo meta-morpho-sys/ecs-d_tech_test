@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'sequel'
 require_relative 'logging'
 require_relative 'script'
 
@@ -19,9 +18,9 @@ class Database
 
   LOGGER = my_logger
 
-  def initialize(dir, user, host, database, pwd)
+  def initialize(dir:, user:, host:, db_name:, pwd:)
     @dir = dir
-    @db = Sequel.mysql2(host: host, database: database, user: user, password: pwd)
+    @db = Sequel.mysql2(host: host, database: db_name, user: user, password: pwd)
     unless @db.table_exists? 'versionTable'
       @db.create_table :versionTable do
         Integer :version
