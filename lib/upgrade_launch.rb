@@ -37,7 +37,7 @@ opt_parser = OptionParser.new do |opts|
 
   opts.on('-p', '--db_pwd', 'Database password') do
     puts 'Password: '
-    options.merge!(pwd: STDIN.noecho(&:gets).chomp)
+    options.merge!(password: STDIN.noecho(&:gets).chomp)
   end
 
   opts.on_tail('-?', '--help', 'Show this message') do
@@ -53,6 +53,7 @@ if ARGV.length != 9
   puts opt_parser.help
   exit(1)
 else
+  p options
   db = Database.new(**options)
   db.upgrade
 end

@@ -20,7 +20,7 @@ class Database
   LOGGER = my_logger
 
   def initialize(db = nil, **db_conn_info)
-    @dir = dir
+    p @dir = db_conn_info[:dir]
     @db = db || get_db(db_conn_info)
     unless @db.table_exists? 'versionTable'
       @db.create_table :versionTable do
