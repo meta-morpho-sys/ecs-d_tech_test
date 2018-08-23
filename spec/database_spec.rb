@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../lib/database.rb'
+require_relative '../spec/support/db'
 
 describe Database, :db do
   db_info = { dir: '../db/upgrade_scripts', user: 'root', host: 'localhost', db_name: 'test', pwd: 'yuliya'}
@@ -8,15 +9,16 @@ describe Database, :db do
   let(:dtb) { Database.new db_info }
 
   describe 'initialize' do
-    it 'Database class can be initialized with options hash' do
+    it 'Database class can be initialized with keyword args' do
       dtb.version = 22
       expect(dtb.db.test_connection).to eq true
       expect(dtb.version).to eq 22
     end
 
-    xit 'Database class can be initialized existing db connection' do
+    it 'Database class can be initialized existing db connection' do
       # for example connection established in support/db.rb - method db
-
+      other_dtb = Database.new get_db
+      expect(other_dtb.db.test_connection).to eq true
     end
   end
 

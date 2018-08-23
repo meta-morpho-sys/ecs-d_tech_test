@@ -6,11 +6,11 @@ require_relative '../../lib/logging'
 
 LOGGER = my_logger
 
-def db
+def get_db
   Sequel.mysql2(host: 'localhost', database: 'test', user: 'root', password: 'yuliya')
 end
 
-DB = db
+DB = get_db
 
 unless DB.table_exists? 'versionTable'
   DB.create_table :versionTable do
@@ -27,10 +27,10 @@ RSpec.configure do |c|
     # puts '> Cleaning databases.'
   end
 
-  c.after(:suite) do
-    puts '> Dropping table <test>'
-    DB.drop_table :test
-  end
+  # c.after(:suite) do
+  #   puts '> Dropping table <test>'
+  #   DB.drop_table :test
+  # end
 
   # setup DatabaseY instance
   # The following will roll back the transactions

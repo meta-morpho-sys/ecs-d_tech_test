@@ -3,6 +3,7 @@
 
 require_relative 'logging'
 require_relative 'script'
+require_relative '../spec/support/db'
 
 # --------------------------------------------------------------------------
 # Connects to MySQL database and carries out changes on the database schema.
@@ -18,9 +19,9 @@ class Database
 
   LOGGER = my_logger
 
-  def initialize(dir:, user:, host:, db_name:, pwd:)
+  def initialize(ext_db_conn = nil, dir: nil, user: nil, host: nil, db_name: nil, pwd: nil)
     @dir = dir
-    @db = Sequel.mysql2(host: host, database: db_name, user: user, password: pwd)
+    @db = ext_db_conn || Sequel.mysql2(host: host, database: db_name, user: user, password: pwd)
     unless @db.table_exists? 'versionTable'
       @db.create_table :versionTable do
         Integer :version
