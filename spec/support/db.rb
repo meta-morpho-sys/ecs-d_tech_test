@@ -6,22 +6,30 @@ require_relative '../../lib/logging'
 
 LOGGER = my_logger
 
-DB = Sequel.mysql2(host: 'localhost', database: 'test', user: 'root', password: 'yuliya')
+def db
+  Sequel.mysql2(host: 'localhost', database: 'test', user: 'root', password: 'yuliya')
+end
 
+DB = db
 
 unless DB.table_exists? 'versionTable'
   DB.create_table :versionTable do
     Integer :version
-    LOGGER.info '> Version table for test created'
   end
+  LOGGER.info '> Version table for <test> created'
 end
-versions = DB[:versionTable]
-versions.insert(version: 0)
+DB[:versionTable].truncate
+DB[:versionTable].insert(version: 0)
 
 RSpec.configure do |c|
   c.before(:suite) do
-    puts '> Cleaning databases.'
-    versions.truncate
+    # TODO: clarify how the before :suite hook works. Maybe better :each?
+    # puts '> Cleaning databases.'
+  end
+
+  c.after(:suite) do
+    puts '> Dropping table <test>'
+    DB.drop_table :test
   end
 
   # setup DatabaseY instance
