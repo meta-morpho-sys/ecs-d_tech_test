@@ -46,15 +46,6 @@ opt_parser = OptionParser.new do |opts|
     puts opts
     exit
   end
-
-  # Print ASCII Art.
-  opts.on('-c', '--be_cool', 'Print something cool') do
-    do_cool_thing = true
-  end
-
-  opts.on('-s', '--saturn', 'Be spacey') do
-    saturn = true
-  end
 end
 
 opt_parser.parse(ARGV)
