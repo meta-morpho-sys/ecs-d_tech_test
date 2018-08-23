@@ -4,7 +4,7 @@ require_relative '../lib/database.rb'
 require_relative '../spec/support/db'
 
 describe Database, :db do
-  db_info = { dir: '../db/upgrade_scripts', user: 'root', host: 'localhost', db_name: 'test', pwd: 'yuliya'}
+  db_info = { dir: '../db/upgrade_scripts', user: 'root', host: 'localhost', database: 'test', password: 'yuliya'}
 
   let(:dtb) { Database.new db_info }
 
@@ -15,9 +15,9 @@ describe Database, :db do
       expect(dtb.version).to eq 22
     end
 
-    it 'Database class can be initialized existing db connection' do
-      # for example connection established in support/db.rb - method db
-      other_dtb = Database.new get_db
+    it 'Database class can be initialized with existing db connection' do
+      # for example connection established in support/db.rb - assigned to DB
+      other_dtb = Database.new DB
       expect(other_dtb.db.test_connection).to eq true
     end
   end
