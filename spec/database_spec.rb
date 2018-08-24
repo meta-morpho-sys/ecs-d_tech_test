@@ -4,19 +4,19 @@ require_relative '../lib/database.rb'
 require_relative '../spec/support/db'
 
 describe Database, :db do
-  db_info = { dir: '../db/upgrade_scripts', user: 'root', host: 'localhost', database: 'test', password: 'yuliya'}
 
-  let(:dtb) { Database.new db_info }
+  let(:dtb) { Database.new DB }
 
   describe 'initialize' do
-    it 'Database class can be initialized with keyword args' do
+    it 'Database class can be initialized with existing db connection' do
+      # for example connection established in support/db.rb - assigned to DB
       expect(dtb.db.test_connection).to eq true
     end
 
-    it 'Database class can be initialized with existing db connection' do
-      # for example connection established in support/db.rb - assigned to DB
-      other_dtb = Database.new DB
-      expect(other_dtb.db.test_connection).to eq true
+    it 'Database class can be initialized with options hash' do
+      db_info = { dir: '../db/upgrade_scripts', user: 'root', host: 'localhost', database: 'test', password: 'yuliya'}
+      dtb2 = Database.new db_info
+      expect(dtb2.db.test_connection).to eq true
     end
   end
 
@@ -40,5 +40,4 @@ describe Database, :db do
       scripts.each { |s| dtb.run s }
     end
   end
-
 end
