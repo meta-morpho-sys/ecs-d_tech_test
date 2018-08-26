@@ -49,11 +49,11 @@ end
 opt_parser.parse(ARGV)
 
 if ARGV.length != 9
-  puts ARGV.length
+  puts "ERROR! Wrong number of arguments provided: #{ARGV.length} args, instead of 9"
+  puts "See help summary below.\n\n"
   puts opt_parser.help
   exit(1)
 else
-  p options
   db = Database.new(**options)
   db.upgrade
 end
