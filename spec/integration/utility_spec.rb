@@ -22,7 +22,7 @@ describe 'overcomes the STDIN.noecho error problem' do
 
     # The example below is how the PTY should be used. It's based on the research
     # in the Ruby PTY source code and its tests that show some simple use cases.
-    bin = File.expand_path('../../../lib/upgrade_launch.rb', __FILE__)
+    bin = File.expand_path('../../../lib/upgrade_utility.rb', __FILE__)
     args = ' -d .. -u root -h localhost -n test -p'
     command_line = bin + args
 
@@ -40,7 +40,7 @@ describe 'overcomes the STDIN.noecho error problem' do
 end
 
 def launch(dir)
-  bin = File.expand_path('../../../lib/upgrade_launch.rb', __FILE__)
+  bin = File.expand_path('../../../lib/upgrade_utility.rb', __FILE__)
   args = " -d #{dir} -u root -h localhost -n test -p"
   command_line = bin + args
 
@@ -53,7 +53,6 @@ def launch(dir)
     puts buffer
   }
 end
-
 
 # run against dir test1
 describe 'Run from CL', :db do
@@ -68,5 +67,3 @@ end
 # run against dir test2
 #
 # run against dir test3
-
-

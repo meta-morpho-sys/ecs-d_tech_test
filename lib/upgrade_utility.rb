@@ -1,20 +1,23 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+require 'tmpdir'
+require 'pty'
 require 'optparse'
 require 'ostruct'
 require 'io/console'
 require_relative '../app'
+
 
 logger = my_logger
 options = {}
 
 opt_parser = OptionParser.new do |opts|
   opts.banner = 'Cool thingy: your tool to upgrade your database'.upcase
-  opts.define_head 'Usage: ./upgrade_launch -d -u -h -n -p'
+  opts.define_head 'Usage: ./upgrade_utility -d -u -h -n -p'
   opts.separator ''
   opts.separator 'Example:'
-  opts.separator './upgrade_launch.rb -d ../db/upgrade_scripts -u root -h localhost -n ecs_d -p'
+  opts.separator './upgrade_utility.rb -d ../db/upgrade_scripts -u root -h localhost -n ecs_d -p'
   opts.separator 'Password prompt:'
   opts.separator ''
   opts.separator 'Options:'
@@ -36,8 +39,12 @@ opt_parser = OptionParser.new do |opts|
   end
 
   opts.on('-p', '--db_pwd', 'Database password') do
-    puts 'Password: '
-    options.merge!(password: STDIN.noecho(&:gets).chomp)
+    begin
+      puts 'Password: '
+      options.merge!(password: STDIN.noecho(&:gets).chomp)
+    rescue Errno::ENOTTY
+      puts 'Rescued'
+    end
   end
 
   opts.on_tail('-?', '--help', 'Show this message') do
