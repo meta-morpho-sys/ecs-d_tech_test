@@ -6,7 +6,7 @@ require 'ostruct'
 require 'io/console'
 require_relative '../app'
 
-
+logger = my_logger
 options = {}
 
 opt_parser = OptionParser.new do |opts|
@@ -49,8 +49,8 @@ end
 opt_parser.parse(ARGV)
 
 if ARGV.length != 9
-  puts "ERROR! Wrong number of arguments provided: #{ARGV.length} args, instead of 9"
-  puts "See help summary below.\n\n"
+  logger.error "ERROR! Wrong number of arguments provided: #{ARGV.length} args, instead of 9"
+  logger.info "See help summary below.\n\n"
   puts opt_parser.help
   exit(1)
 else

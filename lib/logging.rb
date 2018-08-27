@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'logger'
+require 'ansi/logger'
 
 def my_logger
-  Logger.new(STDOUT)
+  ANSI::Logger.new(STDOUT)
 end
