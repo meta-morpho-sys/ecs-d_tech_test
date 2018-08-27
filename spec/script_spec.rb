@@ -10,6 +10,11 @@ describe Scripts do
     Scripts.look_up('db/upgrade_scripts')
   end
 
+  it "raises exception when the directory doesn't contain scripts" do
+    expect { Scripts.look_up('db/no_scripts') }
+      .to raise_exception 'No scripts found'
+  end
+
   it 'returns a list of scripts for directory' do
     scripts = Scripts.look_up('db/upgrade_scripts')
     file_names = scripts.map(&:file_name)

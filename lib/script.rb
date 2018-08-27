@@ -22,11 +22,12 @@ end
 # Accesses a given dir and returns an array of scrypts
 class Scripts
   def self.look_up(dir)
-    discard_dirs(dir)
-      .map { |f| Script.new(dir, f) }
+    discard_dirs(dir).map { |f| Script.new(dir, f) }
   end
 
   def self.discard_dirs(dir)
-    Dir.entries(dir).reject { |e| File.directory? e }
+    scripts = Dir.entries(dir).reject { |e| File.directory? e }
+    raise 'No scripts found' if scripts.empty?
+    scripts
   end
 end
