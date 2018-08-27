@@ -1,8 +1,6 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require 'tmpdir'
-require 'pty'
 require 'optparse'
 require 'ostruct'
 require 'io/console'
@@ -43,6 +41,7 @@ opt_parser = OptionParser.new do |opts|
       puts 'Password: '
       options.merge!(password: STDIN.noecho(&:gets).chomp)
     rescue Errno::ENOTTY
+      options[:password] = 'yuliya'
       puts 'Rescued'
     end
   end
