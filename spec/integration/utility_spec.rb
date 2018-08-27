@@ -5,9 +5,8 @@
 require 'tmpdir'
 require 'pty'
 require_relative '../support/db'
-require_relative '../../lib/database'
-require_relative '../../lib/script'
-require_relative '../../lib/logging'
+require_relative '../../lib/launch_helper_PTY'
+
 
 describe 'overcomes the STDIN.noecho error problem' do
   example 'it works once stdio buffering is taken into account' do
@@ -37,21 +36,6 @@ describe 'overcomes the STDIN.noecho error problem' do
       expect(buffer).to include('Current DB version is 0')
     }
   end
-end
-
-def launch(dir)
-  bin = File.expand_path('../../../lib/upgrade_utility.rb', __FILE__)
-  args = " -d #{dir} -u root -h localhost -n test -p"
-  command_line = bin + args
-
-  PTY.spawn(command_line) { |r, w, pid|
-    buffer = r.gets # Password:
-    puts buffer
-
-    w.puts 'yuliya' # Inputs the password in the prompt
-    buffer = r.gets
-    puts buffer
-  }
 end
 
 # run against dir test1
