@@ -3,7 +3,7 @@
 require 'pty'
 
 def launch(dir)
-  p bin = File.expand_path('../upgrade_utility.rb', __FILE__)
+  bin = File.expand_path('../upgrade_utility.rb', __FILE__)
   args = " -d #{dir} -u root -h localhost -n test -p"
   command_line = bin + args
 
@@ -12,7 +12,6 @@ def launch(dir)
     puts buffer
 
     w.puts 'yuliya' # Inputs the password in the prompt
-    buffer = r.gets
-    puts buffer
+    return r.gets
   }
 end
