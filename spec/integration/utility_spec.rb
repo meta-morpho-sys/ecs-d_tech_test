@@ -23,7 +23,7 @@ describe 'overcomes the STDIN.noecho error problem' do
     # The example below is how the PTY should be used. It's based on the research
     # in the Ruby PTY source code and its tests that show some simple use cases.
     bin = File.expand_path('../../../lib/upgrade_launch.rb', __FILE__)
-    args = ' -d .. -u root -h localhost -n ecs_d -p'
+    args = ' -d .. -u root -h localhost -n test -p'
     command_line = bin + args
 
     PTY.spawn(command_line) { |r, w, pid|
@@ -31,17 +31,17 @@ describe 'overcomes the STDIN.noecho error problem' do
       puts buffer
 
       w.puts 'yuliya' # Inputs the password in the prompt
-      buffer = r.gets
-      puts buffer
+      buffer = r.gets # yuliya
+      puts buffer     # I, [2018-08-27T12:24:15.007348 #30572]  INFO -- : Current DB version is 0
 
-      expect(buffer).to include('Current DB version is 49')
+      expect(buffer).to include('Current DB version is 0')
     }
   end
 end
 
 def launch(dir)
   bin = File.expand_path('../../../lib/upgrade_launch.rb', __FILE__)
-  args = ' -d .. -u root -h localhost -n ecs_d -p'
+  args = " -d #{dir} -u root -h localhost -n test -p"
   command_line = bin + args
 
   PTY.spawn(command_line) { |r, w, pid|
@@ -56,12 +56,17 @@ end
 
 
 # run against dir test1
-#
+describe 'Run from CL', :db do
+  launch('./test1')
+
+  it 'checks the db version' do
+    test_db = DB[:versionTable]
+    expect(test_db.map(:version).first).to eq 0
+  end
+end
+
 # run against dir test2
 #
 # run against dir test3
 
-describe 'Run from CL' do
-  it 'runs the script'
-end
 
