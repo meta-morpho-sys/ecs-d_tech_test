@@ -17,11 +17,20 @@ require_relative '../spec/support/db'
 class Database
   attr_reader :db
 
-  LOGGER = my_logger
+  LOGGER = MyLogger.log
 
   def initialize(db = nil, **db_conn_info)
     @dir = db_conn_info[:dir]
-    @db = db || get_db(db_conn_info)
+    begin
+      @db = db || get_db(db_conn_info)
+      set_version_table
+    rescue Sequel::DatabaseConnectionError
+      LOGGER.info('Incorrect access details')
+      exit 1
+    end
+  end
+
+  def set_version_table
     unless @db.table_exists? 'versionTable'
       @db.create_table :versionTable do
         Integer :version
@@ -50,20 +59,24 @@ class Database
     LOGGER.info("Current DB version is #{current_db_version}")
 
     # Get highest script version
-    scripts = Scripts.look_up(@dir).sort_by(&:version)
-    max_version = scripts.last.version
-    LOGGER.info("Max script version is #{max_version}")
+    begin
+      scripts = Scripts.look_up(@dir).sort_by(&:version)
+      max_version = scripts.last.version
+      LOGGER.info("Max script version is #{max_version}")
+      # Run only scripts with version higher than the DB version.
+      if max_version > current_db_version
+        LOGGER.info 'updating...'
+        run_scripts(current_db_version, scripts)
 
-    # Run only scripts with version higher than the DB version.
-    if max_version > current_db_version
-      LOGGER.info 'updating...'
-      run_scripts(current_db_version, scripts)
-
-      self.version = max_version
-      LOGGER.info "New DB version: #{version}"
-    else
-      LOGGER.warn 'DB up to date'
+        self.version = max_version
+        LOGGER.info "New DB version: #{version}"
+      else
+        LOGGER.info 'DB up to date'
+      end
+    rescue
+      LOGGER.info("No scripts found in #{@dir}, the database hasn't been upgraded.")
     end
+
   end
 
   def run_scripts(current_db_version, scripts)
