@@ -4,7 +4,7 @@ require 'rspec'
 require 'sequel'
 require_relative '../../lib/logging'
 
-LOGGER = my_logger
+LOGGER = MyLogger.log
 
 # -----------------------------------------------------------------------------
 # Sets up the connection to the database.
