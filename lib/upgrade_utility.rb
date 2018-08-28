@@ -7,7 +7,7 @@ require 'io/console'
 require_relative '../app'
 
 
-logger = my_logger
+logger = MyLogger.log
 options = {}
 
 opt_parser = OptionParser.new do |opts|
@@ -42,7 +42,6 @@ opt_parser = OptionParser.new do |opts|
       options.merge!(password: STDIN.noecho(&:gets).chomp)
     rescue Errno::ENOTTY
       options[:password] = 'yuliya'
-      puts 'Rescued'
     end
   end
 
