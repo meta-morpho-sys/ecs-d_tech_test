@@ -17,7 +17,7 @@ require_relative '../spec/support/db'
 class Database
   attr_reader :db
 
-  LOGGER = MyLogger.log
+  LOGGER = my_logger
 
   def initialize(db = nil, **db_conn_info)
     @dir = db_conn_info[:dir]
@@ -76,7 +76,6 @@ class Database
     rescue
       LOGGER.info("No scripts found in #{@dir}, the database hasn't been upgraded.")
     end
-
   end
 
   def run_scripts(current_db_version, scripts)
