@@ -50,7 +50,7 @@ end
 opt_parser.parse(ARGV)
 
 if ARGV.length != 9
-  logger.error "ERROR! Wrong number of arguments provided: #{ARGV.length} args, instead of 9"
+  logger.error "Wrong number of arguments provided: #{ARGV.length} args, instead of 9"
   logger.info "See help summary below.\n\n"
   puts opt_parser.help
   exit(1)
