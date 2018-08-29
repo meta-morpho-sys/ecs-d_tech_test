@@ -3,7 +3,7 @@
 require 'pty'
 
 def launch(dir)
-  bin = File.expand_path('../db_upgrade_ecs.rb', __FILE__)
+  bin = File.expand_path('../../bin/db_upgrade_ecs', __FILE__)
   args = " -d #{dir} -u root -h localhost -n test -p"
   command_line = bin + args
 

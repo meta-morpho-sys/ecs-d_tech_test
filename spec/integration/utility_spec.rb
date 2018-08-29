@@ -2,7 +2,6 @@
 
 # This is INTEGRATION testing of the entire utility.
 
-require 'tmpdir'
 require 'pty'
 require_relative '../support/db'
 require_relative '../../lib/launch_helper_PTY'
@@ -10,6 +9,7 @@ require_relative '../../lib/launch_helper_PTY'
 
 describe 'overcomes the STDIN.noecho error problem' do
   example 'it works once stdio buffering is taken into account' do
+    #---------------------------------------------------------------------------
     # Launch the utility, give it input(password)
     # and check that no ENOTTY error is thrown.
     # This launches a process and gives us control over input and output strings
@@ -19,9 +19,10 @@ describe 'overcomes the STDIN.noecho error problem' do
     # IMPORTANT! The example given in the docs above only illustrates BAD CODE
     # case, when IO.pipe is used.
 
-    # The example below is how the PTY should be used. It's based on the research
-    # in the Ruby PTY source code and its tests that show some simple use cases.
-    bin = File.expand_path('../../../lib/upgrade_utility.rb', __FILE__)
+    # The example below is how the PTY should be used. It's based on a research
+    # in the Ruby PTY source code. Some simple use cases were found in its tests
+    #---------------------------------------------------------------------------
+    bin = File.expand_path('../../../bin/db_upgrade_ecs', __FILE__)
     args = ' -d .. -u root -h localhost -n test -p'
     command_line = bin + args
 
