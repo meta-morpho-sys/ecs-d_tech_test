@@ -2,7 +2,7 @@
 
 require 'rspec'
 require 'sequel'
-require_relative '../../lib/logging'
+require_relative '../../logs/logging'
 
 LOGGER = my_logger
 

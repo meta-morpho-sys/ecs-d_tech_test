@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative 'logging'
+require_relative '../logs/logging'
 require_relative 'script'
 require_relative '../spec/support/db'
 
