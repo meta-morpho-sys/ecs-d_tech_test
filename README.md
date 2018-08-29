@@ -13,14 +13,14 @@
  ###### Running
  
    ```
-    Usage: ./DB_upgrade dir user host db_name db_password
+    Usage: ./db_upgrade_ecs dir user host db_name db_password
    ```
    
    
  ###### Example of invoking of the script from the CL.
  
    ```
-    $ ./DB_upgrade.rb db/upgrade_scripts root localhost test yuliya
+    $ ./db_upgrade_ecs.rb db/upgrade_scripts root localhost test yuliya
    ```
  
  
